@@ -1,0 +1,381 @@
+:root {
+  color-scheme: light;
+  --bg: #f5f4f1;
+  --text: #161616;
+  --muted: #5b5b5b;
+  --accent: #ff6b4a;
+  --accent-dark: #e04d2d;
+  --white: #ffffff;
+  --card: #1f1f1f;
+  --shadow: 0 20px 40px rgba(22, 22, 22, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Manrope", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.hero {
+  background: linear-gradient(120deg, #f7efe7 0%, #f6f4f1 50%, #f4f6fb 100%);
+  padding: 32px 8vw 80px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 64px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  font-weight: 600;
+}
+
+.nav-links .cta {
+  background: var(--text);
+  color: var(--white);
+  padding: 10px 18px;
+  border-radius: 999px;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 48px;
+  align-items: center;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  margin: 16px 0 20px;
+  line-height: 1.1;
+}
+
+.lead {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.primary {
+  background: var(--accent);
+  color: var(--white);
+  padding: 12px 26px;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+}
+
+.ghost {
+  background: transparent;
+  border: 1px solid rgba(22, 22, 22, 0.2);
+  padding: 12px 26px;
+  border-radius: 999px;
+}
+
+.card-preview {
+  position: relative;
+}
+
+.card-glow {
+  position: absolute;
+  inset: 20px 10px;
+  background: radial-gradient(circle at top, rgba(255, 107, 74, 0.35), transparent 65%);
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #1b1b1b, #2c2c2c);
+  color: var(--white);
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.card-chip {
+  width: 52px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f7d08a, #f3b24a);
+}
+
+.card-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.card-number {
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1px;
+  opacity: 0.6;
+}
+
+.value {
+  font-weight: 600;
+}
+
+.mini-info {
+  background: var(--white);
+  padding: 18px 20px;
+  border-radius: 20px;
+  margin-top: 24px;
+  box-shadow: var(--shadow);
+}
+
+.section {
+  padding: 80px 8vw;
+}
+
+.section-title {
+  max-width: 520px;
+  margin-bottom: 48px;
+}
+
+.section-title h2 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  margin-bottom: 12px;
+}
+
+.section-title p {
+  color: var(--muted);
+}
+
+.offer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.offer-card {
+  background: var(--white);
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.offer-card ul {
+  list-style: none;
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+}
+
+.offer-card button {
+  background: var(--text);
+  color: var(--white);
+  padding: 12px 20px;
+  border-radius: 999px;
+}
+
+.offer-card.featured {
+  background: var(--text);
+  color: var(--white);
+  transform: translateY(-12px);
+}
+
+.offer-card.featured ul {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-card.featured button {
+  background: var(--accent);
+}
+
+.badge {
+  align-self: flex-start;
+  background: var(--accent);
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.experiences {
+  background: #f1f2f6;
+}
+
+.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.experience {
+  padding: 24px;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.club {
+  background: var(--text);
+  color: var(--white);
+}
+
+.club-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+  align-items: center;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.stats h3 {
+  font-size: 1.8rem;
+}
+
+.club-card {
+  background: var(--white);
+  color: var(--text);
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.club-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.club-form input {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(22, 22, 22, 0.2);
+}
+
+.club-form button {
+  background: var(--accent);
+  color: var(--white);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.contact {
+  background: var(--white);
+}
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: #f7f4f1;
+  padding: 32px;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.contact-card button {
+  background: var(--text);
+  color: var(--white);
+  padding: 12px 22px;
+  border-radius: 999px;
+}
+
+.footer {
+  padding: 32px 8vw 48px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  color: var(--muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .nav {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .contact-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
