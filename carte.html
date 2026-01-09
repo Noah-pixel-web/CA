@@ -2,115 +2,44 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Concurrents Orange Bleue – Carte interactive</title>
+<title>Zone de chalandise – L’Orange Bleue</title>
 
-<!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
-:root {
-  --orange: #ff6a00;
-  --gris: #f4f4f4;
-  --fonce: #333;
+:root{
+  --orange:#ff6a00;
+  --gris:#f4f4f4;
 }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--gris);
+body{margin:0;font-family:Arial,sans-serif;background:var(--gris)}
+#topBar{
+  position:fixed;top:0;width:100%;z-index:1001;
+  background:white;padding:10px;display:flex;gap:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.15)
 }
+#topBar strong{color:var(--orange)}
+#search{flex:1;padding:8px;border:2px solid var(--orange);border-radius:5px}
+#map{height:100vh;margin-top:55px}
 
-#topBar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: white;
-  z-index: 1001;
-  padding: 10px 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  gap: 10px;
+#infoPanel{
+  position:fixed;top:55px;right:-100%;
+  width:45%;height:calc(100% - 55px);
+  background:white;overflow-y:auto;
+  box-shadow:-4px 0 10px rgba(0,0,0,.25);
+  transition:.4s;padding:20px;z-index:1000
 }
+#infoPanel.active{right:0}
+.closeBtn{float:right;cursor:pointer;font-size:22px}
+h2{color:var(--orange);margin-top:0}
+.card{background:#fafafa;padding:15px;border-radius:8px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #ddd;padding:8px}
+th{background:var(--orange);color:white}
 
-#search {
-  flex: 1;
-  padding: 8px;
-  border: 2px solid var(--orange);
-  border-radius: 5px;
-}
-
-#map {
-  height: 100vh;
-  width: 100%;
-  margin-top: 55px;
-}
-
-#infoPanel {
-  position: fixed;
-  top: 55px;
-  right: -100%;
-  width: 45%;
-  height: calc(100% - 55px);
-  background: white;
-  overflow-y: auto;
-  box-shadow: -4px 0 10px rgba(0,0,0,0.25);
-  transition: 0.4s;
-  padding: 20px;
-  z-index: 1000;
-}
-
-#infoPanel.active {
-  right: 0;
-}
-
-.closeBtn {
-  float: right;
-  cursor: pointer;
-  font-size: 22px;
-}
-
-h2 {
-  color: var(--orange);
-  margin-top: 0;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-}
-
-th {
-  background: var(--orange);
-  color: white;
-}
-
-.card {
-  background: #fafafa;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  #infoPanel {
-    width: 100%;
-    height: 50%;
-    bottom: -100%;
-    top: auto;
-    right: 0;
-  }
-
-  #infoPanel.active {
-    bottom: 0;
-  }
+@media(max-width:768px){
+  #infoPanel{width:100%;height:50%;bottom:-100%;top:auto;right:0}
+  #infoPanel.active{bottom:0}
 }
 </style>
 </head>
@@ -118,7 +47,7 @@ th {
 <body>
 
 <div id="topBar">
-  <strong>🏋️ Concurrents Orange Bleue</strong>
+  <strong>🏋️ Zone de chalandise – L’Orange Bleue</strong>
   <input id="search" placeholder="Rechercher une salle…" oninput="filterGyms()">
 </div>
 
@@ -130,79 +59,145 @@ th {
 </div>
 
 <script>
-// ================= MAP =================
-const map = L.map("map").setView([41.43, 2.18], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap"
+// ================= ORANGE BLEUE =================
+const orangeBleue = {lat:41.4305,lng:2.1840};
+
+const map = L.map("map").setView([orangeBleue.lat,orangeBleue.lng],13);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+  attribution:"© OpenStreetMap"
 }).addTo(map);
 
-// ================= PANEL =================
-const panel = document.getElementById("infoPanel");
-const panelContent = document.getElementById("panelContent");
+L.marker([orangeBleue.lat,orangeBleue.lng],{
+  icon:L.icon({
+    iconUrl:"https://maps.gstatic.com/mapfiles/ms2/micons/orange.png",
+    iconSize:[32,32],iconAnchor:[16,32]
+  })
+}).addTo(map).bindPopup("🏋️ L’Orange Bleue");
 
-function openPanel(content, lat, lng) {
-  panelContent.innerHTML = content;
+L.circle([orangeBleue.lat,orangeBleue.lng],{
+  radius:2000,color:"#ff6a00",fillColor:"#ff6a00",fillOpacity:0.15
+}).addTo(map);
+
+// ================= PANNEAU =================
+const panel=document.getElementById("infoPanel");
+const panelContent=document.getElementById("panelContent");
+function openPanel(html,lat,lng){
+  panelContent.innerHTML=html;
   panel.classList.add("active");
-  map.setView([lat, lng], 16);
+  map.setView([lat,lng],15);
 }
+function closePanel(){panel.classList.remove("active");}
 
-function closePanel() {
-  panel.classList.remove("active");
-}
+// ================= SALLES =================
+const gyms=[
+{ name:"Club Esports Fabra Gym",lat:41.4335,lng:2.1831,
+html:`<div class="card"><h2>Club Esports Fabra Gym</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Mensuel</td><td>≈50€</td><td>Musculation & fitness</td><td>Variable</td></tr>
+</table></div>`},
 
-// ================= DATA =================
-const gyms = [
-{
-  name: "Club Esports Fabra Gym",
-  lat: 41.4335,
-  lng: 2.1831,
-  html: `
-  <div class="card">
-  <h2>🏋️ Club Esports Fabra Gym</h2>
-  <table>
-    <tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
-    <tr><td>Mensuel</td><td>≈ 50 €</td><td>Muscu & fitness</td><td>Variable</td></tr>
-    <tr><td>Annuel</td><td>❓</td><td>Complet</td><td>Plus avantageux</td></tr>
-  </table>
-  </div>`
-},
+{ name:"Nick Spa & Sport Club",lat:41.4388,lng:2.1864,
+html:`<div class="card"><h2>Nick Spa & Sport Club</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Accès libre</td><td>99,95€</td><td>Gym + Spa</td><td>Premium</td></tr>
+</table></div>`},
 
-{
-  name: "Nick Spa & Sport Club",
-  lat: 41.4388,
-  lng: 2.1864,
-  html: `
-  <div class="card">
-  <h2>💆 Nick Spa & Sport Club</h2>
-  <table>
-    <tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
-    <tr><td>Accès limité</td><td>77,95 €</td><td>Gym + spa</td><td>Horaires restreints</td></tr>
-    <tr><td>Accès libre</td><td>99,95 €</td><td>Tout inclus</td><td>Premium</td></tr>
-  </table>
-  </div>`
-}
+{ name:"Gimnàs Sport Club",lat:41.4269,lng:2.1795,
+html:`<div class="card"><h2>Gimnàs Sport Club</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Mensuel</td><td>44€</td><td>Fitness</td><td>Standard</td></tr>
+</table></div>`},
+
+{ name:"Puro Impacto",lat:41.4298,lng:2.1762,
+html:`<div class="card"><h2>Puro Impacto</h2><table>
+<tr><th>Pack</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Fitness</td><td>45€</td><td>Muscu</td><td>+matrícula</td></tr>
+<tr><td>Fight Club</td><td>79€</td><td>Sports combat</td><td>Boxe / MMA</td></tr>
+</table></div>`},
+
+{ name:"VivaGym Meridiana",lat:41.4354,lng:2.1881,
+html:`<div class="card"><h2>VivaGym Meridiana</h2><table>
+<tr><th>Plan</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>ONE</td><td>29,90€</td><td>Club local</td><td>Sans engagement</td></tr>
+</table></div>`},
+
+{ name:"VivaGym Pegàs",lat:41.4317,lng:2.1916,
+html:`<div class="card"><h2>VivaGym Pegàs</h2><table>
+<tr><th>Plan</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>ONE</td><td>29,90€</td><td>Gym</td><td>Basique</td></tr>
+</table></div>`},
+
+{ name:"Entrena-T 24h Sant Andreu",lat:41.4361,lng:2.1889,
+html:`<div class="card"><h2>Entrena-T 24h</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Mensuel</td><td>47,90€</td><td>24h/7j</td><td>Sans engagement</td></tr>
+</table></div>`},
+
+{ name:"Club Natació Sant Andreu",lat:41.4359,lng:2.1853,
+html:`<div class="card"><h2>Club Natació Sant Andreu</h2><table>
+<tr><th>Type</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Mensuel</td><td>≈48€</td><td>Piscine + gym</td><td>Complet</td></tr>
+</table></div>`},
+
+{ name:"Cobosu Gym Station",lat:41.4282,lng:2.1813,
+html:`<div class="card"><h2>Cobosu Gym Station</h2><p>Aucun tarif public – sur demande</p></div>`},
+
+{ name:"CEM Guinardó",lat:41.4188,lng:2.1734,
+html:`<div class="card"><h2>CEM Guinardó</h2><table>
+<tr><th>Quota</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Adulte</td><td>55,85€</td><td>Piscine + fitness</td><td>Municipal</td></tr>
+</table></div>`},
+
+{ name:"DIR Alcúdia",lat:41.4381,lng:2.1820,
+html:`<div class="card"><h2>DIR Alcúdia</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Standard</td><td>≈45€</td><td>Complet</td><td>DIR</td></tr>
+</table></div>`},
+
+{ name:"DIR Maragall",lat:41.4219,lng:2.1730,
+html:`<div class="card"><h2>DIR Maragall</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Mensuel</td><td>≈48€</td><td>Complet</td><td>DIR</td></tr>
+</table></div>`},
+
+{ name:"Synergym Fabra i Puig",lat:41.4332,lng:2.1819,
+html:`<div class="card"><h2>Synergym Fabra i Puig</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Basic</td><td>≈22€</td><td>Gym</td><td>Low-cost</td></tr>
+</table></div>`},
+
+{ name:"Synergym Maragall",lat:41.4214,lng:2.1708,
+html:`<div class="card"><h2>Synergym Maragall</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>Basic</td><td>≈23€</td><td>Gym</td><td>Low-cost</td></tr>
+</table></div>`},
+
+{ name:"CEM Cotxeres Borbó",lat:41.4290,lng:2.1745,
+html:`<div class="card"><h2>CEM Cotxeres Borbó</h2><p>Tarifs sur place</p></div>`},
+
+{ name:"Forus Can Dragó",lat:41.4323,lng:2.1701,
+html:`<div class="card"><h2>Forus Can Dragó</h2><table>
+<tr><th>Formule</th><th>Prix</th><th>Accès</th><th>Remarques</th></tr>
+<tr><td>PLUS</td><td>≈68€</td><td>Piscine + spa</td><td>Premium</td></tr>
+</table></div>`}
 ];
 
-// ================= MARKERS =================
-const markers = [];
-
-gyms.forEach(gym => {
-  const marker = L.marker([gym.lat, gym.lng])
-    .addTo(map)
-    .bindPopup(gym.name)
-    .on("click", () => openPanel(gym.html, gym.lat, gym.lng));
-  markers.push(marker);
+// ================= MARQUEURS =================
+const markers=[];
+gyms.forEach(g=>{
+  const m=L.marker([g.lat,g.lng]).addTo(map)
+   .bindPopup(g.name)
+   .on("click",()=>openPanel(g.html,g.lat,g.lng));
+  markers.push(m);
 });
 
-// ================= SEARCH =================
-function filterGyms() {
-  const q = document.getElementById("search").value.toLowerCase();
-  markers.forEach((marker, i) => {
-    if (gyms[i].name.toLowerCase().includes(q)) {
-      marker.addTo(map);
-    } else {
-      map.removeLayer(marker);
-    }
+// ================= RECHERCHE =================
+function filterGyms(){
+  const q=document.getElementById("search").value.toLowerCase();
+  markers.forEach((m,i)=>{
+    if(gyms[i].name.toLowerCase().includes(q)){m.addTo(map);}
+    else{map.removeLayer(m);}
   });
 }
 </script>
